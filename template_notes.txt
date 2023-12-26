@@ -1,0 +1,76 @@
+To prevent rendudancy across your html file, you define one template and then re-use it across different templates that have
+the same data, e.g a footer or header section.
+
+Example:
+main.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        Dropp
+    </title>
+</head>
+<body>
+<h1>
+    {% block title %} {% endblock %}
+</h1>
+<ul>
+    <li><a href="../">Home</a></li>
+    <li><a href="../contact">Contact</a></li>
+    <li><a href="../about">About</a></li>
+</ul>
+<hr>
+
+{% block body %}
+{% endblock %}
+
+<hr>
+<center>
+<h5>
+    Copyright &copy; 2022
+</h5>
+</center>
+
+</body>
+</html>
+
+And then import it in home.html:
+{% extends 'tango/main.html' %}
+
+{% block title %} - substitute this for the 'title' block in main.html
+    Home Page
+{% endblock %}
+
+{% block body %} - substitute this for the 'body' block
+    <p>
+        Cliff, you will be a MULTI-BILLIONAIRE soon! (we're talking about in dollars)
+    </p>
+{% endblock %}
+
+And then render the html files in your views.py file as you usually would.
+
+
+HOW TO REFERENCE OTHER HTML FILES WHEN YOU'RE USING DJANGO:
+<ul>
+    <li><a href="../">Home</a></li>
+    <li><a href="../contact">Contact</a></li>
+    <li><a href="../about">About</a></li>
+</ul>
+Don't use the file name, e.g contact.html, cause django won't catch that in the url patterns. Instead you use the name of
+the specific url pattern that you've defined.
+
+
+HOW TO INCLUDE THE CONTENTS OF ANOTHER HTML FILE INSIDE A SECTION OF A HTML FILE
+Use the 'include' statement
+
+{% block body %}
+    <p>
+        <b>Cliff G, Founder & C.E.O of Dropp LLC.</b>
+        Multi-billionaire.
+        Suave.
+        Sexy.
+    </p>
+    {% include 'tango/contact_section.html' %}
+{% endblock %}

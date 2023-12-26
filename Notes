@@ -1,0 +1,58 @@
+Create project: python manage.py startproject 'project_name'
+Create app inside project: python manage.py startapp 'app_name'
+
+After creating an app, go to the settings.py file within the project and add your app's name to the INSTALLED_APPS array.
+
+URL ROUTING
+Done in the urls.py file.
+You can route all your urls in your project-level urls.py file or app-level urls.py file.
+
+1. PROJECT LEVEL
+from tango.views import home
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('tango/', home),
+]
+
+2. APP LEVEL
+Create a urls.py file in your app directory at the top-level.
+Add a urlpatterns array, e.g:
+
+from django.urls import path
+from .views  import home
+
+urlpatterns = [
+    path('goals/', home)
+]
+
+And then import the app-level urls.py in your project-level urls.py file
+You don't have to explicitly import the urlpatterns array. The include() function from django.urls handles the dirty work
+
+from django.urls import path, include
+from tango import urls as tango_urls
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('tango/', include(tango_urls)),
+]
+
+A simpler option instead of importing app-level urls.py into project level urls.py is to pass in the relative path of the urls file
+into the include() function, like so (the relative path is in the form of 'app_name.urls'):
+from django.urls import path, include
+# from tango import urls as tango_urls - do not import
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('tango/', include('tango.urls')), # do this instead
+]
+
+RENDERING HTML
+Create a folder named 'templates' inside your project at project-level
+To create html templates for your specific app, create another folder inside 'templates' and give it your app's name
+Then you can add html files.
+To render the html, use the 'render' function inside your methods
+
+from django.shortcuts import render
+def home(request):
+    return render(request, 'tango/home.html')
